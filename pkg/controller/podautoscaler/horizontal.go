@@ -760,7 +760,7 @@ func (a *HorizontalController) reconcileAutoscaler(ctx context.Context, hpaShare
 
 	reference := fmt.Sprintf("%s/%s/%s", hpa.Spec.ScaleTargetRef.Kind, hpa.Namespace, hpa.Spec.ScaleTargetRef.Name)
 
-	targetGV, err := schema.ParseGroupVersion(hpa.Spec.ScaleTargetRef.APIVersion)
+	targetGV, err := schema.ParseGroupVersion(hpa.Spec.ScaleTargetRef.APIVersion) // 拆分hpa对象的apiVersion
 	if err != nil {
 		a.eventRecorder.Event(hpa, v1.EventTypeWarning, "FailedGetScale", err.Error())
 		setCondition(hpa, autoscalingv2.AbleToScale, v1.ConditionFalse, "FailedGetScale", "the HPA controller was unable to get the target's current scale: %v", err)
@@ -775,7 +775,7 @@ func (a *HorizontalController) reconcileAutoscaler(ctx context.Context, hpaShare
 		Kind:  hpa.Spec.ScaleTargetRef.Kind,
 	}
 
-	mappings, err := a.mapper.RESTMappings(targetGK)
+	mappings, err := a.mapper.RESTMappings(targetGK) // kruise workload 可以在此被mapping出来
 	if err != nil {
 		a.eventRecorder.Event(hpa, v1.EventTypeWarning, "FailedGetScale", err.Error())
 		setCondition(hpa, autoscalingv2.AbleToScale, v1.ConditionFalse, "FailedGetScale", "the HPA controller was unable to get the target's current scale: %v", err)

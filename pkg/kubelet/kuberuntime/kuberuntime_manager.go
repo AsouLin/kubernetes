@@ -807,6 +807,7 @@ func (m *kubeGenericRuntimeManager) updatePodContainerResources(pod *v1.Pod, res
 				v1.ResourceMemory: *resource.NewQuantity(cInfo.currentContainerResources.memoryRequest, resource.BinarySI),
 			}
 		}
+		// 调用cri 变更容器resource
 		if err := m.updateContainerResources(pod, container, cInfo.kubeContainerID); err != nil {
 			// Log error and abort as container updates need to succeed in the order determined by computePodResizeAction.
 			// The recovery path is for SyncPod to keep retrying at later times until it succeeds.

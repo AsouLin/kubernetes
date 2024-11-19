@@ -885,7 +885,7 @@ func (m *manager) syncPod(uid types.UID, status versionedPodStatus) {
 		// We pass a new object (result of API call which contains updated ResourceVersion)
 		m.podStartupLatencyHelper.RecordStatusUpdated(pod)
 	}
-
+	
 	// measure how long the status update took to propagate from generation to update on the server
 	if status.at.IsZero() {
 		klog.V(3).InfoS("Pod had no status time set", "pod", klog.KObj(pod), "podUID", uid, "version", status.version)
